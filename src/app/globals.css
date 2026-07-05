@@ -59,13 +59,7 @@
   --color-bcolor1: var(--bcolor1);
   --color-bcolor2: var(--bcolor2);
   --color-bcolor3: var(--bcolor3);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+
 
 
 
@@ -85,7 +79,7 @@
   --foreground: #4a5568;
 
   --card: #ffffff;
-  --card-foreground: #1f1f24;
+  /* --card-foreground: #1f1f24; */
 
   --color1: #2d3748;
   --color2: #212529;
@@ -101,7 +95,7 @@
   --bg2: #ffffff;
   --bg3: #f5f5f5;
   --bg4: #dfdfdf;
-  --bg5: #112032;
+  --bg5: #ffffff;
   --bg6: #232e42;
   --b-shadow1: 7.5px 20px 7.5px 20px rgba(108, 126, 147, 0.15);
   --b-shadow2: 7.43px 49.03px 7.5px 49.03px rgba(108, 126, 147, 0.1);
@@ -143,11 +137,13 @@
 }
 
 .dark {
-  --background: #0f1117;
+  --background: #232E42;
   --foreground: #f4f4f6;
 
-  --card: #171a22;
+  --card: #112032;
   --card-foreground: #f4f4f6;
+
+  --bg5: #112032;
 
   --primary: #4f8cff;
   --primary-foreground: #ffffff;
@@ -190,6 +186,19 @@
     padding-right: 5px; */
 }
 
+/* * scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -213,5 +222,22 @@
   .bg-grid-fade {
     background-image: radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 0);
     background-size: 24px 24px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--foreground) 12%, transparent);
+    border-radius: 9999px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--foreground) 24%, transparent);
   }
 }
