@@ -28,11 +28,7 @@ export const registerSchema = z
     password: z
       .string()
       .min(8, "Password must be at least 8 characters")
-      .max(128, "Password is too long")
-      .regex(/[a-z]/, "Include at least one lowercase letter")
-      .regex(/[A-Z]/, "Include at least one uppercase letter")
-      .regex(/[0-9]/, "Include at least one number")
-      .regex(/[^a-zA-Z0-9]/, "Include at least one special character"),
+      .max(128, "Password is too long"),
     confirmPassword: z.string().min(1, "Please repeat your password"),
     agreeToTerms: z.boolean().refine((val) => val === true, {
       message: "You must agree to the terms & conditions",

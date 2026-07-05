@@ -2,17 +2,20 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-// import { zodResolver } from "@hookform/resolvers/zod";
-import { type LoginFormValues } from "../lib/validations/loginSchema";
-import { LoginApiResponse } from "../types/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type LoginFormValues } from "../lib/validations/loginSchema";
+import { useAuth } from "../shared/AuthContext";
+import { useLoginMutation } from "../../redux/api/authApi";
+import { handleError } from "../../lib/handleError";
 
 export function useLoginForm() {
-  const [serverError, setServerError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const { login } = useAuth();
+  const [loginApi] = useLoginMutation();
 
   const form = useForm<LoginFormValues>({
-    // resolver: zodResolver(loginSchema),
-    mode: "onBlur",
+    resolver: zodResolver(loginSchema),
+    mode: "onSubmit",
     defaultValues: {
       email: "",
       password: "",
@@ -21,44 +24,25 @@ export function useLoginForm() {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    setServerError(null);
-
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-
-      const data: LoginApiResponse = await res.json();
-
-      if (!data.success) {
-        if (data.fieldErrors) {
-          for (const [field, messages] of Object.entries(data.fieldErrors)) {
-            if (messages?.[0]) {
-              form.setError(field as keyof LoginFormValues, {
-                type: "server",
-                message: messages[0],
-              });
-            }
-          }
-        }
-        setServerError(data.message);
-        return;
-      }
+      const response = await loginApi({
+        email: values.email,
+        password: values.password,
+      }).unwrap();
 
       setIsSuccess(true);
-    } catch {
-      setServerError(
-        "Something went wrong. Please check your connection and try again.",
-      );
+
+      // Save session inside AuthContext (synced to Redux store)
+      const { user, tokens } = response.data;
+      login(tokens.accessToken, tokens.refreshToken, user);
+    } catch (error: any) {
+      handleError(error);
     }
   });
 
   return {
     form,
     onSubmit,
-    serverError,
     isSuccess,
     isSubmitting: form.formState.isSubmitting,
   };

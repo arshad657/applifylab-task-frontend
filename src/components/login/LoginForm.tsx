@@ -7,9 +7,12 @@ import { FormField } from "@/src/components/shared/FormField";
 import { PasswordInput } from "@/src/components/shared/PasswordInput";
 import { RememberMeAndForgotPassword } from "@/src/components/login/RememberMeAndForgotPassword";
 import { useLoginForm } from "../hooks/useLoginForm";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
-  const { form, onSubmit, serverError, isSuccess, isSubmitting } = useLoginForm();
+  const router = useRouter();
+  const { form, onSubmit, isSuccess, isSubmitting } = useLoginForm();
 
   const {
     register,
@@ -17,20 +20,11 @@ export function LoginForm() {
     formState: { errors },
   } = form;
 
-  if (isSuccess) {
-    return (
-      <div
-        role="status"
-        className="flex flex-col items-center gap-3 rounded-md border border-success/30 bg-success/10 p-6 text-center"
-      >
-        <CheckCircle2 className="h-9 w-9 text-success" aria-hidden="true" />
-        <p className="font-medium text-foreground">You&apos;re logged in</p>
-        <p className="text-sm text-muted-foreground">
-          Taking you to your dashboard...
-        </p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/feed");
+    }
+  }, [isSuccess, router])
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-5">
@@ -49,7 +43,7 @@ export function LoginForm() {
       <FormField id="password" label="Password" error={errors.password?.message}>
         <PasswordInput
           id="password"
-          autoComplete="current-password"
+          autoComplete="password"
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? "password-error" : undefined}
           {...register("password")}
@@ -57,12 +51,6 @@ export function LoginForm() {
       </FormField>
 
       <RememberMeAndForgotPassword control={control} />
-
-      {serverError && (
-        <p role="alert" className="text-sm text-destructive">
-          {serverError}
-        </p>
-      )}
 
       <Button
         type="submit"

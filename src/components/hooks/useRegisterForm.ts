@@ -7,11 +7,14 @@ import {
   type RegisterFormValues,
 } from "../lib/validations/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterApiResponse } from "../types/auth";
+import { useAuth } from "../shared/AuthContext";
+import { useRegisterMutation } from "../../redux/api/authApi";
+import { handleError } from "../../lib/handleError";
 
 export function useRegisterForm() {
-  const [serverError, setServerError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const { login } = useAuth();
+  const [registerApi] = useRegisterMutation();
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -27,44 +30,33 @@ export function useRegisterForm() {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    setServerError(null);
-
     try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-
-      const data: RegisterApiResponse = await res.json();
-
-      if (!data.success) {
-        if (data.fieldErrors) {
-          for (const [field, messages] of Object.entries(data.fieldErrors)) {
-            if (messages?.[0]) {
-              form.setError(field as keyof RegisterFormValues, {
-                type: "server",
-                message: messages[0],
-              });
-            }
-          }
-        }
-        setServerError(data.message);
-        return;
-      }
+      const { email, firstName, lastName, password } = values;
+      const response = await registerApi({ email, firstName, lastName, password }).unwrap();
 
       setIsSuccess(true);
-    } catch {
-      setServerError(
-        "Something went wrong. Please check your connection and try again.",
-      );
+
+      // Save session inside AuthContext
+      const { user, tokens } = response.data;
+      login(tokens.accessToken, tokens.refreshToken, user);
+    } catch (error: any) {
+      const errMsg = handleError(error);
+      const errorJson = error?.data || {};
+
+      if (errorJson.errors) {
+        for (const [field, message] of Object.entries(errorJson.errors)) {
+          form.setError(field as any, {
+            type: "server",
+            message: message as string,
+          });
+        }
+      }
     }
   });
 
   return {
     form,
     onSubmit,
-    serverError,
     isSuccess,
     isSubmitting: form.formState.isSubmitting,
   };
