@@ -14,7 +14,7 @@ export const loginSchema = z.object({
     .max(254, "Email is too long")
     .email("Enter a valid email address"),
   password: z.string().min(1, "Password is required").max(128, "Password is too long"),
-  rememberMe: z.boolean().optional().default(false),
+  rememberMe: z.boolean(),
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;

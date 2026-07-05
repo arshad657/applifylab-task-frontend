@@ -4,13 +4,15 @@ import { Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { FormField } from "@/src/components/shared/FormField";
 import { PasswordInput } from "@/src/components/shared/PasswordInput";
-import { PasswordStrengthMeter } from "@/src/components/registration/PasswordStrengthMeter";
 import { TermsCheckbox } from "@/src/components/registration/TermsCheckbox";
 import { useRegisterForm } from "../hooks/useRegisterForm";
 import { Input } from "../ui/input";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export function RegistrationForm() {
-  const { form, onSubmit, serverError, isSuccess, isSubmitting } =
+  const router = useRouter();
+  const { form, onSubmit, isSuccess, isSubmitting } =
     useRegisterForm();
 
   const {
@@ -20,23 +22,14 @@ export function RegistrationForm() {
     formState: { errors },
   } = form;
 
-  const password = watch("password");
-  const agreeToTerms = watch("agreeToTerms");
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/feed");
+    }
+  }, [isSuccess, router])
 
-  if (isSuccess) {
-    return (
-      <div
-        role="status"
-        className="flex flex-col items-center gap-3 rounded-md border border-success/30 bg-success/10 p-6 text-center"
-      >
-        <CheckCircle2 className="h-9 w-9 text-success" aria-hidden="true" />
-        <p className="font-medium text-foreground">Account created</p>
-        <p className="text-sm text-muted-foreground">
-          We&apos;ve sent a verification link to your email address.
-        </p>
-      </div>
-    );
-  }
+
+  const agreeToTerms = watch("agreeToTerms");
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-5">
@@ -87,7 +80,6 @@ export function RegistrationForm() {
           aria-describedby={errors.password ? "password-error" : undefined}
           {...register("password")}
         />
-        <PasswordStrengthMeter password={password ?? ""} />
       </FormField>
 
       <FormField
@@ -106,12 +98,6 @@ export function RegistrationForm() {
       </FormField>
 
       <TermsCheckbox control={control} errors={errors} />
-
-      {serverError && (
-        <p role="alert" className="text-sm text-destructive">
-          {serverError}
-        </p>
-      )}
 
       <Button
         type="submit"
