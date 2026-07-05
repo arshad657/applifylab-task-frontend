@@ -1,9 +1,9 @@
 "use client";
 
 import { forwardRef, useState } from "react";
-import { Smile, Paperclip } from "lucide-react";
+import { Smile, Paperclip, Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { currentUser } from "../lib/mock/feedData";
+import { useAuth } from "../shared/AuthContext";
 import type { Comment } from "../types/feed";
 
 export const CommentComposer = forwardRef<
@@ -11,6 +11,10 @@ export const CommentComposer = forwardRef<
   { onSubmit: (content: string) => void }
 >(function CommentComposer({ onSubmit }, ref) {
   const [value, setValue] = useState("");
+  const { user } = useAuth();
+
+  const avatarUrl = user?.avatarUrl || "https://i.pravatar.cc/150?img=12";
+  const name = user ? `${user.firstName} ${user.lastName}` : "User";
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,8 +26,8 @@ export const CommentComposer = forwardRef<
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-3">
       <Avatar className="h-9 w-9">
-        <AvatarImage src={currentUser.avatarUrl} alt="" />
-        <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
+        <AvatarImage src={avatarUrl} alt="" />
+        <AvatarFallback>{name.charAt(0)}</AvatarFallback>
       </Avatar>
       <div className="flex flex-1 items-center gap-1 rounded-full bg-bg3 px-3 py-1.5">
         <input
@@ -49,6 +53,14 @@ export const CommentComposer = forwardRef<
           className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary"
         >
           <Paperclip className="h-4 w-4" />
+        </button>
+        <button
+          type="submit"
+          disabled={!value.trim()}
+          aria-label="Send comment"
+          className="flex h-7 w-7 items-center justify-center rounded-full text-primary hover:bg-secondary disabled:opacity-40 transition-colors"
+        >
+          <Send className="h-4 w-4" />
         </button>
       </div>
     </form>

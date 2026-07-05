@@ -1,8 +1,14 @@
+"use client";
+
 import Image from "next/image";
 import { Plus } from "lucide-react";
-import { currentUser, stories } from "../lib/mock/feedData";
+import { useAuth } from "../shared/AuthContext";
+import { stories } from "../lib/mock/feedData";
 
 export function StoriesRow() {
+  const { user } = useAuth();
+  const avatarUrl = user?.avatarUrl || "https://i.pravatar.cc/150?img=12";
+
   return (
     <div
       className="mb-4 flex gap-3 overflow-x-auto pb-1"
@@ -14,7 +20,7 @@ export function StoriesRow() {
         className="relative h-44 w-28 shrink-0 overflow-hidden rounded-2xl border border-border bg-secondary"
       >
         <Image
-          src={currentUser.avatarUrl}
+          src={avatarUrl}
           alt=""
           fill
           sizes="112px"

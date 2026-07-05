@@ -6,7 +6,20 @@ import { PostCard } from "./PostCard";
 import { useFeedPosts } from "../hooks/useFeedPosts";
 
 export function CenterFeed() {
-  const { posts, likedPostIds, addPost, toggleLike, addComment } = useFeedPosts();
+  const {
+    posts,
+    likedPostIds,
+    isFetchingNext,
+    hasMore,
+    addPost,
+    toggleLike,
+    addComment,
+    loadComments,
+    loadNextPage,
+  } = useFeedPosts();
+
+  console.log("hasMore: ", hasMore)
+
 
   return (
     <main className="custom-scrollbar scrollbar-hide min-w-0 min-h-0 h-full overflow-y-auto pb-6 pr-1.5">
@@ -19,8 +32,29 @@ export function CenterFeed() {
           liked={likedPostIds.includes(post.id)}
           onToggleLike={toggleLike}
           onAddComment={addComment}
+          onLoadComments={loadComments}
         />
       ))}
+
+      {hasMore && (
+        <div className="flex justify-center py-6">
+          <button
+            type="button"
+            onClick={loadNextPage}
+            disabled={isFetchingNext}
+            className="px-6 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg shadow-sm hover:shadow transition disabled:opacity-50 flex items-center gap-2"
+          >
+            {isFetchingNext ? (
+              <>
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                Loading...
+              </>
+            ) : (
+              "Show More"
+            )}
+          </button>
+        </div>
+      )}
     </main>
   );
 }

@@ -1,13 +1,13 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { FeedPanel } from "./FeedPanel";
 import { PostMenu } from "./PostMenu";
 import { PostActionRow, PostReactionSummary } from "./PostReactions";
 import { CommentComposer, CommentList } from "./PostComments";
-import { currentUser } from "../lib/mock/feedData";
+import { useAuth } from "../shared/AuthContext";
 import type { Post } from "../types/feed";
 
 export function PostCard({
@@ -15,13 +15,21 @@ export function PostCard({
   liked,
   onToggleLike,
   onAddComment,
+  onLoadComments,
 }: {
   post: Post;
   liked: boolean;
   onToggleLike: (postId: string) => void;
   onAddComment: (postId: string, content: string) => void;
+  onLoadComments: (postId: string) => void;
 }) {
   const commentInputRef = useRef<HTMLInputElement>(null);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    onLoadComments(post.id);
+  }, [post.id, onLoadComments]);
+
 
   return (
     <FeedPanel className="mb-4">
@@ -41,7 +49,7 @@ export function PostCard({
               </p>
             </div>
           </div>
-          <PostMenu isOwner={post.author.id === currentUser.id} />
+          <PostMenu isOwner={post.author.id === user?.id} />
         </div>
 
         {post.content && (

@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { FeedPanel } from "./FeedPanel";
-import { currentUser } from "../lib/mock/feedData";
+import { useAuth } from "../shared/AuthContext";
 
 const ATTACHMENTS = [
   { id: "photo", label: "Photo", icon: ImageIcon, color: "text-emerald-500" },
@@ -21,6 +21,11 @@ export function CreatePostBox({
   onSubmit: (content: string) => void;
 }) {
   const [content, setContent] = useState("");
+  const { user } = useAuth();
+  
+  const displayName = user ? `${user.firstName} ${user.lastName}` : "User";
+  const firstName = user?.firstName || "User";
+  const avatarUrl = user?.avatarUrl || "https://i.pravatar.cc/150?img=12";
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -34,13 +39,13 @@ export function CreatePostBox({
       <form onSubmit={handleSubmit}>
         <div className="flex gap-3">
           <Avatar className="h-11 w-11">
-            <AvatarImage src={currentUser.avatarUrl} alt="" />
-            <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
+            <AvatarImage src={avatarUrl} alt="" />
+            <AvatarFallback>{displayName.charAt(0)}</AvatarFallback>
           </Avatar>
           <Textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder={`What's on your mind, ${currentUser.name.split(" ")[0]}?`}
+            placeholder={`What's on your mind, ${firstName}?`}
             aria-label="Write a post"
             maxLength={2000}
             className="min-h-[44px]"
