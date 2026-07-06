@@ -4,7 +4,7 @@ import { setCredentials, clearCredentials } from "../authSlice";
 import { RootState } from "../store";
 import { getRefreshTokenCookie, setRefreshTokenCookie } from "@/src/lib/token";
 
-const API_BASE_URL = "http://localhost:4000/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://social-feed-backend-production-6f04.up.railway.app/api/v1";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
