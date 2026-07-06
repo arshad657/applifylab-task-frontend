@@ -21,14 +21,6 @@ export function EventsCard() {
                   sizes="56px"
                   className="object-cover"
                 />
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 text-white">
-                  <span className="text-[10px] font-medium uppercase leading-none">
-                    {event.month}
-                  </span>
-                  <span className="text-sm font-semibold leading-none">
-                    {event.day}
-                  </span>
-                </div>
               </div>
               <p className="text-sm font-medium leading-snug text-foreground">
                 {event.title}

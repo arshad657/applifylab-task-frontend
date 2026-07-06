@@ -28,7 +28,7 @@ export function CenterFeed() {
 
       {posts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 px-4 text-center rounded-2xl p-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <div className="relative mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-secondary/50 text-primary border border-border">
+          <div className="relative mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-secondary/50 text-primary border border-gray-300">
             <Newspaper className="h-8 w-8 text-primary/80" />
             <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
               !

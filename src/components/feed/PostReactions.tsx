@@ -53,7 +53,7 @@ export function PostActionRow({
   onFocusComment: () => void;
 }) {
   return (
-    <div className="grid grid-cols-3 border-t border-border pt-1 text-sm font-medium">
+    <div className="grid grid-cols-3 border-y border-gray-300 py-1 text-sm font-medium">
       <button
         type="button"
         onClick={onToggleLike}
@@ -76,7 +76,7 @@ export function PostActionRow({
       </button>
       <button
         type="button"
-        className="flex items-center justify-center gap-2 rounded-lg py-2 text-muted-foreground transition-colors hover:bg-color10 cursor-pointer"
+        className="flex items-center justify-center gap-2 rounded-lg py-2 text-gray-300 transition-colors !cursor-not-allowed"
       >
         <Share2 className="h-4 w-4" />
         Share

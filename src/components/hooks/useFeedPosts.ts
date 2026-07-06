@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { handleError } from "../../lib/handleError";
+import { toast } from "sonner";
 import { Post, Comment } from "../types/feed";
 import { formatRelativeTime } from "../lib/utils";
 import { AppDispatch } from "../../redux/store";
@@ -126,6 +127,7 @@ export function useFeedPosts() {
   const addPost = useCallback(async (content: string, isPublic: boolean, imageUrl?: string) => {
     try {
       await addPostMutation({ text: content, isPublic, imageUrl }).unwrap();
+      toast.success("Post created successfully!");
     } catch (err) {
       handleError(err);
     }

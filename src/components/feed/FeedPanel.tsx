@@ -11,7 +11,7 @@ export function FeedPanel({
 }) {
   return (
     <Card className={cn("border-none", className)}>
-      <CardContent className="p-5 sm:p-5">{children}</CardContent>
+      <CardContent className="pt-5 px-5">{children}</CardContent>
     </Card>
   );
 }

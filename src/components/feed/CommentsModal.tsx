@@ -48,7 +48,7 @@ export function LikersModal({ targetId, targetType, open, onOpenChange }: Likers
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-sm w-full max-h-[60vh] flex flex-col p-0 gap-0 overflow-hidden bg-card">
-        <DialogHeader className="border-b border-border px-6 py-4 flex flex-row items-center justify-between">
+        <DialogHeader className="border-b border-gray-300 px-6 py-4 flex flex-row items-center justify-between">
           <DialogTitle className="text-md font-semibold text-foreground">Likes</DialogTitle>
         </DialogHeader>
 
@@ -119,16 +119,16 @@ function CommentNode({
         </Avatar>
         <div className="flex-1 min-w-0">
           {/* Comment Bubble Container */}
-          <div className="relative inline-block max-w-full">
+          <div className="relative inline-block max-w-full bg-background rounded-lg">
             {/* Comment Bubble */}
             <div className="rounded-[18px] bg-background dark:bg-secondary/25 px-4 py-2.5 inline-block max-w-full">
               {isPostAuthor && (
-                <div className="flex items-center gap-1 text-[11px] font-semibold text-muted-foreground/80 mb-0.5 select-none">
-                  <Pencil className="h-3 w-3" />
+                <div className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground/80 mb-0.5 select-none">
+                  <Pencil className="size-2.5" />
                   <span>Author</span>
                 </div>
               )}
-              <p className="text-sm font-semibold text-foreground leading-tight">
+              <p className="text-xs font-semibold text-foreground leading-tight">
                 {comment.user.name}
               </p>
               <p className="mt-1 text-sm text-foreground/90 leading-normal whitespace-pre-wrap font-normal">
@@ -166,7 +166,7 @@ function CommentNode({
               <button
                 type="button"
                 onClick={() => onShowLikes(comment.id)}
-                className="flex items-center gap-1 rounded-full bg-card border border-border px-1.5 py-0.5 shadow-sm text-[10px] text-muted-foreground select-none cursor-pointer hover:bg-secondary/40 transition-colors"
+                className="flex items-center gap-1 rounded-full bg-card border border-gray-300 px-1.5 py-0.5 shadow-sm text-[10px] text-muted-foreground select-none cursor-pointer hover:bg-secondary/40 transition-colors"
               >
                 <ThumbsUp className="h-2.5 w-2.5 text-primary" fill="currentColor" />
                 <span>{comment.likesCount}</span>
@@ -178,7 +178,7 @@ function CommentNode({
 
       {/* Children replies rendered recursively */}
       {replies.length > 0 && (
-        <div className="pl-9 space-y-3 border-l border-border/40 ml-[18px]">
+        <div className="pl-9 space-y-3 border-l border-gray-300/40 ml-[18px]">
           {replies.map((reply: any) => (
             <CommentNode
               key={reply.id}
@@ -313,7 +313,7 @@ export function CommentsModal({ postId, postAuthorId, postAuthorName, open, onOp
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-2xl w-full h-[85vh] flex flex-col p-0 gap-0 overflow-hidden bg-card">
           {/* Header */}
-          <DialogHeader className="border-b border-border px-6 py-4 flex flex-col items-start gap-1">
+          <DialogHeader className="border-b border-gray-300 px-6 py-4 flex flex-col items-start gap-1">
             <DialogTitle className="text-lg font-semibold text-foreground">{postAuthorName}'s Post</DialogTitle>
             <DialogDescription className="text-xs text-muted-foreground mt-0">
               {comments.length} comment{comments.length !== 1 ? "s" : ""}
@@ -352,7 +352,7 @@ export function CommentsModal({ postId, postAuthorId, postAuthorName, open, onOp
 
           {/* Reply Indicator */}
           {replyingTo && (
-            <div className="flex items-center justify-between bg-muted/40 px-6 py-2 border-t border-border text-xs text-muted-foreground animate-in slide-in-from-bottom-2 duration-150">
+            <div className="flex items-center justify-between bg-muted/40 px-6 py-2 border-t border-gray-300 text-xs text-muted-foreground animate-in slide-in-from-bottom-2 duration-150">
               <span className="font-medium">
                 Replying to <span className="text-foreground font-semibold">@{replyingTo.name}</span>
               </span>
@@ -367,7 +367,7 @@ export function CommentsModal({ postId, postAuthorId, postAuthorName, open, onOp
           )}
 
           {/* Composer Form */}
-          <div className="border-t border-background bg-card px-6 py-4">
+          <div className="border-t border-gray-300 bg-card px-6 py-4">
             <form onSubmit={handleSubmit} className="flex items-center gap-3">
               <Avatar className="h-9 w-9">
                 <AvatarImage src={user?.avatarUrl || "https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t"} alt="" />

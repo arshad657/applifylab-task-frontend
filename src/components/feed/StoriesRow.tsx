@@ -17,7 +17,7 @@ export function StoriesRow() {
     >
       <div
         role="listitem"
-        className="relative h-44 w-28 shrink-0 overflow-hidden rounded-2xl border border-border bg-secondary"
+        className="relative h-44 w-28 shrink-0 overflow-hidden rounded-2xl border border-gray-300 bg-secondary"
       >
         <Image
           src={avatarUrl}

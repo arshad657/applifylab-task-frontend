@@ -9,15 +9,13 @@ import { FeedPanel } from "./FeedPanel";
 import { useAuth } from "../shared/AuthContext";
 import { useUploadImageMutation } from "../../redux/api/postsApi";
 import { handleError } from "../../lib/handleError";
+import { toast } from "sonner";
 
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 
 const ATTACHMENTS = [
   { id: "photo", label: "Photo", icon: ImageIcon, color: "text-emerald-500" },
-  { id: "video", label: "Video", icon: Video, color: "text-rose-500" },
-  { id: "event", label: "Event", icon: CalendarDays, color: "text-amber-500" },
-  { id: "article", label: "Article", icon: FileText, color: "text-sky-500" },
 ] as const;
 
 export function CreatePostBox({
@@ -41,6 +39,10 @@ export function CreatePostBox({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Only image files are allowed.");
+        return;
+      }
       setSelectedFile(file);
       setPreviewUrl(URL.createObjectURL(file));
     }
@@ -85,10 +87,10 @@ export function CreatePostBox({
               placeholder={`What's on your mind, ${firstName}?`}
               aria-label="Write a post"
               maxLength={2000}
-              className="min-h-[44px] w-full"
+              className="min-h-[44px] w-full resize-none overflow-hidden"
             />
             {previewUrl && (
-              <div className="relative mt-3 rounded-lg overflow-hidden max-h-60 border border-border group">
+              <div className="relative mt-3 rounded-lg overflow-hidden max-h-60 border border-gray-300 group">
                 <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
                 <button
                   type="button"
@@ -114,7 +116,7 @@ export function CreatePostBox({
           className="hidden"
         />
 
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-border">
+        <div className="mt-4 p-3 rounded-lg flex flex-wrap items-center justify-between gap-3 bg-[#F3F9FF] border-gray-300">
           <div className="flex flex-wrap gap-1.5">
             {ATTACHMENTS.map(({ id, label, icon: Icon, color }) => (
               <button
@@ -132,8 +134,8 @@ export function CreatePostBox({
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
+          <div className="flex items-end gap-4">
+            <div className="flex gap-2">
               <Switch
                 id="post-visibility"
                 checked={isPrivate}
@@ -144,7 +146,7 @@ export function CreatePostBox({
               </Label>
             </div>
 
-            <Button type="submit" size="sm" disabled={(!content.trim() && !selectedFile) || isUploading}>
+            <Button type="submit" size="sm" disabled={(!content.trim() && !selectedFile) || isUploading} className={"px-5 !py-4"}>
               {isUploading ? (
                 <>
                   <Loader2 className="h-3 w-3 animate-spin mr-1.5" />

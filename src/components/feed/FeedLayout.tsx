@@ -8,7 +8,7 @@ export function FeedLayout() {
     <div className="h-screen overflow-hidden bg-background">
       <FeedHeader />
       <div className="containers h-[calc(100vh-64px)] overflow-hidden py-6">
-        <div className="h-full grid grid-cols-1 gap-6 lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[260px_minmax(0,1fr)_300px]">
+        <div className="h-full grid grid-cols-1 gap-6 lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)_320px]">
           <LeftSidebar />
           <CenterFeed />
           <RightSidebar />

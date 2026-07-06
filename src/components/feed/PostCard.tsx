@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { FeedPanel } from "./FeedPanel";
 import { PostMenu } from "./PostMenu";
 import { PostActionRow, PostReactionSummary } from "./PostReactions";
-import { CommentComposer, CommentList } from "./PostComments";
+import { CommentComposer } from "./PostComments";
 import { useAuth } from "../shared/AuthContext";
 import type { Post } from "../types/feed";
 import { CommentsModal, LikersModal } from "./CommentsModal";
@@ -82,12 +82,11 @@ export function PostCard({
           onFocusComment={() => setIsCommentsModalOpen(true)}
         />
 
-        <div className="space-y-4 border-t border-border pt-4">
+        <div className="space-y-4">
           <CommentComposer
             ref={commentInputRef}
-            onSubmit={(content) => onAddComment(post.id, content)}
+            onSubmit={(content: any) => onAddComment(post.id, content)}
           />
-          <CommentList comments={post.comments} hiddenCount={post.hiddenCommentCount} />
         </div>
       </div>
 
