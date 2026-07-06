@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { FeedPanel } from "./FeedPanel";
@@ -9,30 +9,25 @@ import { PostActionRow, PostReactionSummary } from "./PostReactions";
 import { CommentComposer, CommentList } from "./PostComments";
 import { useAuth } from "../shared/AuthContext";
 import type { Post } from "../types/feed";
-import { CommentsModal } from "./CommentsModal";
+import { CommentsModal, LikersModal } from "./CommentsModal";
 
 export function PostCard({
   post,
   liked,
   onToggleLike,
   onAddComment,
-  onLoadComments,
 }: {
   post: Post;
   liked: boolean;
   onToggleLike: (postId: string) => void;
   onAddComment: (postId: string, content: string) => void;
-  onLoadComments: (postId: string) => void;
 }) {
-  const commentInputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
+
+  const commentInputRef = useRef<HTMLInputElement>(null);
   const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
+  const [isLikersModalOpen, setIsLikersModalOpen] = useState(false);
 
-  useEffect(() => {
-    onLoadComments(post.id);
-  }, [post.id, onLoadComments]);
-
-  console.log("image url: ", post.imageUrl)
 
   return (
     <FeedPanel className="mb-4">
@@ -47,8 +42,8 @@ export function PostCard({
               <p className="text-sm font-semibold text-foreground">
                 {post.author.name}
               </p>
-              <p className="text-xs text-muted-foreground">
-                {post.postedAt} &middot; {post.audience}
+              <p className="text-xs ">
+                {post.postedAt} &middot; <span className={!post.isPublic ? "text-red-500" : "text-muted-foreground"}> {post.isPublic ? "Public" : "Only me"}</span>
               </p>
             </div>
           </div>
@@ -76,10 +71,9 @@ export function PostCard({
 
         <PostReactionSummary
           reactionCount={post.reactionCount}
-          reactionAvatars={post.reactionAvatars}
           commentCount={post.commentCount}
-          shareCount={post.shareCount}
           onCommentClick={() => setIsCommentsModalOpen(true)}
+          onReactionClick={() => setIsLikersModalOpen(true)}
         />
 
         <PostActionRow
@@ -103,6 +97,13 @@ export function PostCard({
         postAuthorName={post.author.name}
         open={isCommentsModalOpen}
         onOpenChange={setIsCommentsModalOpen}
+      />
+
+      <LikersModal
+        targetId={post.id}
+        targetType="POST"
+        open={isLikersModalOpen}
+        onOpenChange={setIsLikersModalOpen}
       />
     </FeedPanel>
   );

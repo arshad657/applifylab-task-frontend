@@ -4,35 +4,27 @@ import { cn } from "../lib/utils";
 
 export function PostReactionSummary({
   reactionCount,
-  reactionAvatars,
   commentCount,
-  shareCount,
   onCommentClick,
+  onReactionClick,
 }: {
   reactionCount: number;
-  reactionAvatars: string[];
   commentCount: number;
-  shareCount: number;
   onCommentClick?: () => void;
+  onReactionClick?: () => void;
 }) {
-  if (reactionCount === 0 && commentCount === 0 && shareCount === 0) return null;
+  if (reactionCount === 0 && commentCount === 0) return null;
 
   return (
     <div className="flex items-center justify-between text-sm text-muted-foreground">
       {reactionCount > 0 ? (
-        <div className="flex items-center gap-2">
-          <div className="flex -space-x-2">
-            {reactionAvatars.slice(0, 3).map((src, i) => (
-              <span
-                key={i}
-                className="relative h-5 w-5 overflow-hidden rounded-full border-2 border-card"
-              >
-                <Image src={src} alt="" fill sizes="20px" className="object-cover" />
-              </span>
-            ))}
-          </div>
-          <span>{reactionCount}</span>
-        </div>
+        <button
+          type="button"
+          onClick={onReactionClick}
+          className="hover:underline text-muted-foreground focus:outline-none cursor-pointer font-medium"
+        >
+          {reactionCount} {reactionCount === 1 ? "like" : "likes"}
+        </button>
       ) : (
         <span />
       )}
@@ -46,7 +38,6 @@ export function PostReactionSummary({
             {commentCount} comments
           </button>
         )}
-        {shareCount > 0 && <span>{shareCount} shares</span>}
       </div>
     </div>
   );
@@ -69,11 +60,11 @@ export function PostActionRow({
         aria-pressed={liked}
         className={cn(
           "flex items-center justify-center gap-2 rounded-lg py-2 transition-colors hover:bg-color10 cursor-pointer",
-          liked ? "text-primary" : "text-muted-foreground"
+          liked ? "text-primary bg-color10" : "text-muted-foreground"
         )}
       >
         <ThumbsUp className="h-4 w-4" fill={liked ? "currentColor" : "none"} />
-        Like
+        {liked ? "Liked" : "Like"}
       </button>
       <button
         type="button"

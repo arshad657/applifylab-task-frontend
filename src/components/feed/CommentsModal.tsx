@@ -6,13 +6,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useAuth } from "../shared/AuthContext";
 import {
   useGetCommentsQuery,
-  useCreateCommentMutation,
+  useAddCommentMutation,
   useLikeCommentMutation,
   useUnlikeCommentMutation,
   useGetLikersQuery,
 } from "../../redux/api/postsApi";
 import { handleError } from "../../lib/handleError";
-import { cn } from "../lib/utils";
+import { cn, formatRelativeTime } from "../lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -29,22 +29,6 @@ interface CommentsModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-function formatRelativeTime(dateString: string): string {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffSecs = Math.floor(diffMs / 1000);
-  const diffMins = Math.floor(diffSecs / 60);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
-
-  if (diffSecs < 60) return "Just now";
-  if (diffMins < 60) return `${diffMins}m`;
-  if (diffHours < 24) return `${diffHours}h`;
-  if (diffDays < 7) return `${diffDays}d`;
-
-  return date.toLocaleDateString();
-}
 
 interface LikersModalProps {
   targetId: string | null;
@@ -175,13 +159,6 @@ function CommentNode({
               >
                 Reply
               </button>
-
-              {/* Reply Count */}
-              {depth === 0 && comment.repliesCount > 0 && (
-                <span className="text-muted-foreground/60 select-none">
-                  &middot; {comment.repliesCount} reply{comment.repliesCount !== 1 ? "ies" : ""}
-                </span>
-              )}
             </div>
 
             {/* Like Count Badge */}
@@ -231,7 +208,7 @@ export function CommentsModal({ postId, postAuthorId, postAuthorName, open, onOp
 
   //Query and Mutations
   const { data: response, isLoading } = useGetCommentsQuery(postId, { skip: !open });
-  const [createComment, { isLoading: isSubmitting }] = useCreateCommentMutation();
+  const [addComment, { isLoading: isSubmitting }] = useAddCommentMutation();
   const [likeComment] = useLikeCommentMutation();
   const [unlikeComment] = useUnlikeCommentMutation();
 
@@ -243,6 +220,17 @@ export function CommentsModal({ postId, postAuthorId, postAuthorName, open, onOp
   useEffect(() => {
     if (response) {
       listEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [response]);
+
+  // Sync backend comment like status to local state when comments response changes
+  useEffect(() => {
+    if (response && response.status === "success") {
+      const backendComments = response.data || [];
+      const initiallyLiked = backendComments
+        .filter((bc: any) => bc.likedByUser)
+        .map((bc: any) => bc.id);
+      setLikedCommentIds(initiallyLiked);
     }
   }, [response]);
 
@@ -259,9 +247,9 @@ export function CommentsModal({ postId, postAuthorId, postAuthorName, open, onOp
     console.log("replying to: ", replyingTo);
 
     try {
-      await createComment({
+      await addComment({
         postId,
-        text: commentText,
+        text: commentText.trim(),
         parentId: replyingTo?.id ?? undefined
       }).unwrap();
       setCommentText("");
@@ -298,15 +286,14 @@ export function CommentsModal({ postId, postAuthorId, postAuthorName, open, onOp
     id: bc.id,
     user: {
       id: bc.authorId,
-      name: bc.authorUsername,
-      avatarUrl: bc.authorAvatarUrl || `https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t`,
+      name: bc.author ? `${bc.author.firstName} ${bc.author.lastName}` : "User",
+      avatarUrl: bc.author?.avatarUrl || `https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t`,
       title: "Member",
     },
     content: bc.text,
     parentId: bc.parentId,
     postedAt: formatRelativeTime(bc.createdAt),
     likesCount: bc.likesCount || 0,
-    repliesCount: bc.repliesCount || 0,
   }));
 
   // Separate top-level comments and replies
@@ -329,7 +316,7 @@ export function CommentsModal({ postId, postAuthorId, postAuthorName, open, onOp
           <DialogHeader className="border-b border-border px-6 py-4 flex flex-col items-start gap-1">
             <DialogTitle className="text-lg font-semibold text-foreground">{postAuthorName}'s Post</DialogTitle>
             <DialogDescription className="text-xs text-muted-foreground mt-0">
-              {topLevelComments.length} comment{topLevelComments.length !== 1 ? "s" : ""}
+              {comments.length} comment{comments.length !== 1 ? "s" : ""}
             </DialogDescription>
           </DialogHeader>
 

@@ -10,6 +10,9 @@ import { useAuth } from "../shared/AuthContext";
 import { useUploadImageMutation } from "../../redux/api/postsApi";
 import { handleError } from "../../lib/handleError";
 
+import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
+
 const ATTACHMENTS = [
   { id: "photo", label: "Photo", icon: ImageIcon, color: "text-emerald-500" },
   { id: "video", label: "Video", icon: Video, color: "text-rose-500" },
@@ -20,13 +23,15 @@ const ATTACHMENTS = [
 export function CreatePostBox({
   onSubmit,
 }: {
-  onSubmit: (content: string, imageUrl?: string) => void;
+  onSubmit: (content: string, isPublic: boolean, imageUrl?: string) => void;
 }) {
   const [content, setContent] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isPrivate, setIsPrivate] = useState(false);
   const { user } = useAuth();
   const [uploadImage, { isLoading: isUploading }] = useUploadImageMutation();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const displayName = user ? `${user.firstName} ${user.lastName}` : "User";
@@ -55,10 +60,11 @@ export function CreatePostBox({
         imageUrl = res?.data?.url;
       }
 
-      onSubmit(content, imageUrl);
+      onSubmit(content, !isPrivate, imageUrl);
       setContent("");
       setSelectedFile(null);
       setPreviewUrl(null);
+      setIsPrivate(false);
     } catch (err) {
       handleError(err);
     }
@@ -126,16 +132,29 @@ export function CreatePostBox({
               </button>
             ))}
           </div>
-          <Button type="submit" size="sm" disabled={(!content.trim() && !selectedFile) || isUploading}>
-            {isUploading ? (
-              <>
-                <Loader2 className="h-3 w-3 animate-spin mr-1.5" />
-                Posting...
-              </>
-            ) : (
-              "Post"
-            )}
-          </Button>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Switch
+                id="post-visibility"
+                checked={isPrivate}
+                onCheckedChange={setIsPrivate}
+              />
+              <Label htmlFor="post-visibility" className="text-xs font-semibold text-muted-foreground select-none cursor-pointer">
+                {isPrivate ? "Private" : "Public"}
+              </Label>
+            </div>
+
+            <Button type="submit" size="sm" disabled={(!content.trim() && !selectedFile) || isUploading}>
+              {isUploading ? (
+                <>
+                  <Loader2 className="h-3 w-3 animate-spin mr-1.5" />
+                  Posting...
+                </>
+              ) : (
+                "Post"
+              )}
+            </Button>
+          </div>
         </div>
       </form>
     </FeedPanel>
