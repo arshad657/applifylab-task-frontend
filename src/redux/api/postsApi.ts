@@ -12,13 +12,20 @@ export const postsApi = baseApi.injectEndpoints({
       },
       providesTags: ["Post"],
     }),
-    createPost: builder.mutation<any, { text: string; visibility: string }>({
+    createPost: builder.mutation<any, { text: string; visibility: string; imageUrl?: string }>({
       query: (body) => ({
         url: "/posts/create",
         method: "POST",
         body,
       }),
       invalidatesTags: ["Post"],
+    }),
+    uploadImage: builder.mutation<any, FormData>({
+      query: (formData) => ({
+        url: "/posts/upload",
+        method: "POST",
+        body: formData,
+      }),
     }),
     likePost: builder.mutation<any, string>({
       query: (postId) => ({
@@ -83,4 +90,5 @@ export const {
   useLikeCommentMutation,
   useUnlikeCommentMutation,
   useGetLikersQuery,
+  useUploadImageMutation,
 } = postsApi;

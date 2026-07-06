@@ -32,6 +32,7 @@ export function PostCard({
     onLoadComments(post.id);
   }, [post.id, onLoadComments]);
 
+  console.log("image url: ", post.imageUrl)
 
   return (
     <FeedPanel className="mb-4">
@@ -66,6 +67,7 @@ export function PostCard({
               src={post.imageUrl}
               alt=""
               fill
+              unoptimized={post.imageUrl.includes("localhost")}
               sizes="(min-width: 1024px) 640px, 100vw"
               className="object-cover"
             />

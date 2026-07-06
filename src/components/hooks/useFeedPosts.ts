@@ -122,9 +122,9 @@ export function useFeedPosts() {
     }
   }, [dispatch, nextCursor, hasMore, isFetchingNext]);
 
-  const addPost = useCallback(async (content: string) => {
+  const addPost = useCallback(async (content: string, imageUrl?: string) => {
     try {
-      await createPost({ text: content, visibility: "PUBLIC" }).unwrap();
+      await createPost({ text: content, visibility: "PUBLIC", imageUrl }).unwrap();
     } catch (err) {
       handleError(err);
     }
