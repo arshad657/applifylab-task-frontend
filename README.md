@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ApplifyLab Project
+
+A modern, production-style frontend for a social media experience built with Next.js, React, TypeScript, and Tailwind CSS. The application focuses on a polished authentication flow, a dynamic feed experience, and a scalable component-based frontend architecture.
+
+## Purpose
+
+This project delivers a full-featured frontend foundation for a social platform where users can:
+- register and sign in securely,
+- browse a personalized feed,
+- create and interact with posts,
+- explore suggested people, events, and community content,
+- switch themes and manage a modern UI experience.
+
+## Key Features Implemented
+
+### Authentication Experience
+- Login and registration views with social auth entry points
+- Form validation and password strength feedback
+- Protected routing for authenticated users
+- Token-based authentication flow with refresh-token handling
+
+### Social Feed Experience
+- Post cards with likes, comments, and reactions
+- Infinite-style post loading with a “Show More” experience
+- Create-post support with image attachments and visibility toggle
+
+### UI and Experience Enhancements
+- Dark/light theme support using theme switching
+- Reusable UI components built with shadcn-style primitives
+- Toast notifications and polished empty states
+
+## Tech Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS
+- Redux Toolkit + RTK Query
+- React Hook Form + Zod
+- shadcn/ui-inspired component system
+- Sonner for notifications
+- Lucide React for icons
+
+## Project Structure
+
+```text
+src/
+  app/                  # App Router pages and layouts
+    (auth)/             # Authentication-related routes
+    feed/               # Feed page route
+  components/           # Reusable UI and feature components
+    feed/               # Feed, post, sidebar, and content modules
+    login/              # Login UI components
+    registration/       # Registration UI components
+    shared/             # Shared auth/theme/form helpers
+    ui/                 # Base UI primitives
+    hooks/              # Custom hooks
+  redux/                # Store, slices, and API integration
+  lib/                  # Utility, token, and error-handling helpers
+  assets/               # Icons, images, and other static assets
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 20 or newer
+- npm, pnpm, or yarn
+
+### Installation
+
+```bash
+npm install
+```
+
+### Run locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000 in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev      # Start the development server
+npm run build    # Create a production build
+npm run start    # Start the production server
+npm run lint     # Run ESLint checks
+```
 
-## Learn More
+## Architecture Notes
 
-To learn more about Next.js, take a look at the following resources:
+The frontend is organized around feature-based modules to keep the codebase maintainable and production-ready. Authentication state is managed through Redux, while route protection and session handling are handled through a dedicated auth context layer. UI rendering is component-driven and designed for reuse across screens.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Next Steps
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Potential improvements for the next phase include:
+- backend API integration hardening,
+- real-time notifications,
+- richer profile and messaging experiences,
+- expanded test coverage and CI/CD setup.
