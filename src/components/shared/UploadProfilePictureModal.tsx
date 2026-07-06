@@ -80,10 +80,10 @@ export function UploadProfilePictureModal() {
     <Dialog open={true} onOpenChange={() => { }}>
       <DialogContent
         showCloseButton={false}
-        className="sm:max-w-2xl w-full p-6 flex flex-col items-center gap-6 overflow-hidden bg-card border-border"
+        className="sm:max-w-2xl w-full p-6 flex flex-col items-center gap-6 overflow-hidden bg-card border-gray-300"
       >
         <DialogHeader className="w-full text-center flex flex-col items-center gap-2">
-          <DialogTitle className="text-xl font-bold text-foreground">Upload Profile Picture</DialogTitle>
+          <DialogTitle className="text-xl font-medium text-foreground">Upload Profile Picture</DialogTitle>
           <DialogDescription className="text-xs font-medium flex items-center justify-center gap-2 text-destructive bg-destructive/10 dark:bg-destructive/20 border border-destructive/20 rounded-lg px-4 py-2.5 w-full">
             <PiWarningCircleFill size={16} />
             Please upload your profile picture to move forward

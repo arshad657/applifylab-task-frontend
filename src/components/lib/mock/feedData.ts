@@ -9,9 +9,30 @@ import type {
   Story,
   SuggestedPerson,
 } from "../../types/feed";
+import steveJobsImage from "../../../assets/images/feed/people1.png"
+import rahyanImage from "../../../assets/images/feed/people2.png"
+import dylanImage from "../../../assets/images/feed/people3.png"
+import event1 from "../../../assets/images/feed/feed_event1.png"
+import defaultAvatar from "../../../assets/images/feed/Avatar.png"
+import manAvatar from "../../../assets/images/feed/man.png"
+import profileAvatar from "../../../assets/images/feed/profile.png"
+import f1 from "../../../assets/images/feed/f1.png"
+import f2 from "../../../assets/images/feed/f2.png"
+import f3 from "../../../assets/images/feed/f3.png"
+import f4 from "../../../assets/images/feed/f4.png"
+
+
+const localAvatars = [
+  defaultAvatar.src,
+  manAvatar.src,
+  profileAvatar.src,
+  steveJobsImage.src,
+  rahyanImage.src,
+  dylanImage.src,
+];
 
 function avatar(seed: number) {
-  return `https://i.pravatar.cc/150?img=${seed}`;
+  return localAvatars[seed % localAvatars.length];
 }
 
 export const currentUser: FeedUser = {
@@ -33,9 +54,9 @@ export const exploreLinks: ExploreLink[] = [
 ];
 
 export const suggestedPeople: SuggestedPerson[] = [
-  { id: "p-1", name: "Steve Jobs", title: "CEO of Apple", avatarUrl: avatar(15) },
-  { id: "p-2", name: "Ryan Roslansky", title: "CEO of LinkedIn", avatarUrl: avatar(23) },
-  { id: "p-3", name: "Dylan Field", title: "CEO of Figma", avatarUrl: avatar(31) },
+  { id: "p-1", name: "Steve Jobs", title: "CEO of Apple", avatarUrl: steveJobsImage.src },
+  { id: "p-2", name: "Ryan Roslansky", title: "CEO of LinkedIn", avatarUrl: rahyanImage.src },
+  { id: "p-3", name: "Dylan Field", title: "CEO of Figma", avatarUrl: dylanImage.src },
 ];
 
 export const feedEvents: FeedEvent[] = [
@@ -43,15 +64,14 @@ export const feedEvents: FeedEvent[] = [
     id: "ev-1",
     title: "No more terrorism, no more cry",
     imageUrl:
-      "https://images.unsplash.com/photo-1522158637959-30385a09e0da?auto=format&fit=crop&w=400&q=80",
+      event1.src,
     month: "Jan",
     day: "28",
   },
   {
     id: "ev-2",
     title: "Design systems meetup 2026",
-    imageUrl:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=400&q=80",
+    imageUrl: event1.src,
     month: "Feb",
     day: "14",
   },
@@ -61,29 +81,25 @@ export const stories: Story[] = [
   {
     id: "s-1",
     user: { id: "p-2", name: "Ryan Roslansky", avatarUrl: avatar(23) },
-    imageUrl:
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80",
+    imageUrl: f1.src,
     viewed: false,
   },
   {
     id: "s-2",
     user: { id: "p-1", name: "Steve Jobs", avatarUrl: avatar(15) },
-    imageUrl:
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80",
+    imageUrl: f2.src,
     viewed: true,
   },
   {
     id: "s-3",
     user: { id: "p-4", name: "Karim Saif", avatarUrl: avatar(45) },
-    imageUrl:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=400&q=80",
+    imageUrl: f3.src,
     viewed: false,
   },
   {
     id: "s-4",
     user: { id: "p-5", name: "Amelia Chen", avatarUrl: avatar(48) },
-    imageUrl:
-      "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=400&q=80",
+    imageUrl: f4.src,
     viewed: false,
   },
 ];
@@ -124,32 +140,24 @@ export const notifications: NotificationItem[] = [
 ];
 
 export const friends: Friend[] = [
-  { id: "p-1", name: "Steve Jobs", title: "CEO of Apple", avatarUrl: avatar(15), online: false, lastActive: "5 minutes ago" },
-  { id: "p-2", name: "Ryan Roslansky", title: "CEO of LinkedIn", avatarUrl: avatar(23), online: true },
-  { id: "p-3", name: "Dylan Field", title: "CEO of Figma", avatarUrl: avatar(31), online: true },
-  { id: "p-5", name: "Amelia Chen", title: "Product Designer", avatarUrl: avatar(48), online: true },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
-  { id: "p-6", name: "Radovan SkillArena", title: "Founder", avatarUrl: avatar(52), online: false, lastActive: "5 minutes ago" },
+  { id: "p-1", name: "Steve Jobs", title: "CEO of Apple", avatarUrl: steveJobsImage.src, online: false, lastActive: "5 minutes ago" },
+  { id: "p-2", name: "Ryan Roslansky", title: "CEO of LinkedIn", avatarUrl: rahyanImage.src, online: true },
+  { id: "p-3", name: "Dylan Field", title: "CEO of Figma", avatarUrl: dylanImage.src, online: true },
+
+  { id: "p-1", name: "Steve Jobs", title: "CEO of Apple", avatarUrl: steveJobsImage.src, online: false, lastActive: "5 minutes ago" },
+  { id: "p-2", name: "Ryan Roslansky", title: "CEO of LinkedIn", avatarUrl: rahyanImage.src, online: true },
+  { id: "p-3", name: "Dylan Field", title: "CEO of Figma", avatarUrl: dylanImage.src, online: true },
+
+  { id: "p-1", name: "Steve Jobs", title: "CEO of Apple", avatarUrl: steveJobsImage.src, online: false, lastActive: "5 minutes ago" },
+  { id: "p-2", name: "Ryan Roslansky", title: "CEO of LinkedIn", avatarUrl: rahyanImage.src, online: true },
+  { id: "p-3", name: "Dylan Field", title: "CEO of Figma", avatarUrl: dylanImage.src, online: true },
+
+  { id: "p-1", name: "Steve Jobs", title: "CEO of Apple", avatarUrl: steveJobsImage.src, online: false, lastActive: "5 minutes ago" },
+  { id: "p-2", name: "Ryan Roslansky", title: "CEO of LinkedIn", avatarUrl: rahyanImage.src, online: true },
+  { id: "p-3", name: "Dylan Field", title: "CEO of Figma", avatarUrl: dylanImage.src, online: true },
+
+  { id: "p-1", name: "Steve Jobs", title: "CEO of Apple", avatarUrl: steveJobsImage.src, online: false, lastActive: "5 minutes ago" },
+  { id: "p-2", name: "Ryan Roslansky", title: "CEO of LinkedIn", avatarUrl: rahyanImage.src, online: true },
+  { id: "p-3", name: "Dylan Field", title: "CEO of Figma", avatarUrl: dylanImage.src, online: true },
+
 ];
