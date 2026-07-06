@@ -20,7 +20,7 @@ function mapBackendPostToPost(bp: any): Post {
     author: {
       id: bp.author.id,
       name: `${bp.author.firstName} ${bp.author.lastName}`,
-      avatarUrl: bp.author.avatarUrl || `https://i.pravatar.cc/150?img=12`,
+      avatarUrl: bp.author.avatarUrl || `https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t`,
       title: "Member",
     },
     postedAt: new Date(bp.createdAt).toLocaleDateString(),
@@ -45,7 +45,7 @@ function mapBackendCommentToComment(bc: any): Comment {
     user: {
       id: bc.authorId,
       name: bc.authorUsername,
-      avatarUrl: bc.authorAvatarUrl || `https://i.pravatar.cc/150?img=12`,
+      avatarUrl: bc.authorAvatarUrl || `https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t`,
       title: "Member",
     },
     content: bc.text,

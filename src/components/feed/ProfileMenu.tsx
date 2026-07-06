@@ -16,7 +16,7 @@ export function ProfileMenu() {
   const { user, logout } = useAuth();
 
   const displayName = user ? `${user.firstName} ${user.lastName}` : "User";
-  const avatarUrl = user?.avatarUrl || "https://i.pravatar.cc/150?img=12";
+  const avatarUrl = user?.avatarUrl || "https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t";
 
   return (
     <DropdownMenu>

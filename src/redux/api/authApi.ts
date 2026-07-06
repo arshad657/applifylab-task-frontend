@@ -33,6 +33,13 @@ export const authApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    updateProfile: builder.mutation<any, { bio?: string; avatarUrl?: string }>({
+      query: (body) => ({
+        url: "/users/me",
+        method: "PATCH",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -42,4 +49,5 @@ export const {
   useLogoutMutation,
   useGetProfileQuery,
   useRefreshMutation,
+  useUpdateProfileMutation,
 } = authApi;
