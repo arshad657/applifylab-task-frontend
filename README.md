@@ -1,4 +1,4 @@
-# ApplifyLab Project
+# Social Feed Frontend
 
 A modern, production-style frontend for a social media experience built with Next.js, React, TypeScript, and Tailwind CSS. The application focuses on a polished authentication flow, a dynamic feed experience, and a scalable component-based frontend architecture.
 
