@@ -182,6 +182,10 @@
   --sidebar-ring: #7c7cff;
 }
 
+button {
+  cursor: pointer;
+}
+
 .containers {
   /* max-width: 1442px; */
   width: 100%;

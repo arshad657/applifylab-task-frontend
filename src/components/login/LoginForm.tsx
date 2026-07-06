@@ -5,7 +5,7 @@ import { Button } from "@/src/components/ui/button";
 import { Input } from "../ui/input";
 import { FormField } from "@/src/components/shared/FormField";
 import { PasswordInput } from "@/src/components/shared/PasswordInput";
-import { RememberMeAndForgotPassword } from "@/src/components/login/RememberMeAndForgotPassword";
+import { RememberMeAndForgotPassword } from "@/src/components/login/RememberMe";
 import { useLoginForm } from "../hooks/useLoginForm";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";

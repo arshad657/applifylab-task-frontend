@@ -91,6 +91,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const username = payload?.email;
 
           if (username) {
+            // Set access token in the store first so getProfile is request-signed
+            setAuthState(newAccessToken, null);
+
             // Load user profile using RTK Query
             const profileResult = await dispatch(
               authApi.endpoints.getProfile.initiate(username)

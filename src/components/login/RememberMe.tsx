@@ -17,7 +17,7 @@ export function RememberMeAndForgotPassword({
         <Controller
           name="rememberMe"
           control={control}
-          render={({}) => (
+          render={({ }) => (
             <></>
             // <Checkbox
             //   id="rememberMe"
@@ -33,13 +33,6 @@ export function RememberMeAndForgotPassword({
           Remember me
         </Label>
       </div>
-
-      <Link
-        href="/forgot-password"
-        className="text-sm font-medium text-primary underline-offset-2 hover:underline"
-      >
-        Forgot password?
-      </Link>
     </div>
   );
 }
