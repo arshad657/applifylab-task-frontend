@@ -35,19 +35,19 @@ export type Comment = {
   user: FeedUser;
   content: string;
   postedAt: string;
+  likesCount?: number;
+  repliesCount?: number;
 };
 
 export type Post = {
   id: string;
   author: FeedUser;
   postedAt: string;
-  audience: "Public" | "Friends" | "Only me";
+  isPublic: boolean;
   content: string;
   imageUrl?: string;
   reactionCount: number;
-  reactionAvatars: string[];
   commentCount: number;
-  shareCount: number;
   comments: Comment[];
   hiddenCommentCount?: number;
 };

@@ -98,36 +98,6 @@ const sampleComments: Comment[] = [
   },
 ];
 
-export const posts: Post[] = [
-  {
-    id: "post-1",
-    author: { id: "p-4", name: "Karim Saif", title: undefined, avatarUrl: avatar(45) },
-    postedAt: "5 minutes ago",
-    audience: "Public",
-    content: "Healthy Tracking App — excited to finally ship this one.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80",
-    reactionCount: 9,
-    reactionAvatars: [avatar(15), avatar(23), avatar(31)],
-    commentCount: 12,
-    shareCount: 122,
-    hiddenCommentCount: 4,
-    comments: sampleComments,
-  },
-  {
-    id: "post-2",
-    author: { id: "p-1", name: "Steve Jobs", title: "CEO of Apple", avatarUrl: avatar(15) },
-    postedAt: "1 hour ago",
-    audience: "Friends",
-    content:
-      "Simplicity is the ultimate sophistication. Spent the morning sketching a few new ideas — more soon.",
-    reactionCount: 24,
-    reactionAvatars: [avatar(23), avatar(31), avatar(45)],
-    commentCount: 6,
-    shareCount: 18,
-    comments: [],
-  },
-];
 
 export const notifications: NotificationItem[] = [
   {

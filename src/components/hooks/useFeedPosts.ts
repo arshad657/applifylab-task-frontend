@@ -4,13 +4,14 @@ import { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { handleError } from "../../lib/handleError";
 import { Post, Comment } from "../types/feed";
+import { formatRelativeTime } from "../lib/utils";
 import { AppDispatch } from "../../redux/store";
 import {
   useGetFeedQuery,
-  useCreatePostMutation,
+  useAddPostMutation,
   useLikePostMutation,
   useUnlikePostMutation,
-  useCreateCommentMutation,
+  useAddCommentMutation,
   postsApi,
 } from "../../redux/api/postsApi";
 
@@ -23,19 +24,13 @@ function mapBackendPostToPost(bp: any): Post {
       avatarUrl: bp.author.avatarUrl || `https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t`,
       title: "Member",
     },
-    postedAt: new Date(bp.createdAt).toLocaleDateString(),
-    audience: bp.visibility === "PRIVATE" ? "Only me" : "Public",
+    postedAt: formatRelativeTime(bp.createdAt),
+    isPublic: bp.isPublic,
     content: bp.text,
-    imageUrl: bp.imageUrl
-      ? bp.imageUrl.startsWith("http")
-        ? bp.imageUrl
-        : `http://localhost:4000${bp.imageUrl}`
-      : undefined,
-    reactionCount: bp.likesCount || 0,
-    reactionAvatars: [],
-    commentCount: bp.commentsCount || 0,
-    shareCount: 0,
-    comments: bp.comments ? bp.comments.map(mapBackendCommentToComment) : [],
+    imageUrl: bp.imageUrl,
+    reactionCount: bp.likesCount,
+    commentCount: bp.commentsCount,
+    comments: [],
   };
 }
 
@@ -44,14 +39,17 @@ function mapBackendCommentToComment(bc: any): Comment {
     id: bc.id,
     user: {
       id: bc.authorId,
-      name: bc.authorUsername,
-      avatarUrl: bc.authorAvatarUrl || `https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t`,
+      name: bc.author ? `${bc.author.firstName} ${bc.author.lastName}` : "User",
+      avatarUrl: bc.author?.avatarUrl || `https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t`,
       title: "Member",
     },
     content: bc.text,
-    postedAt: new Date(bc.createdAt).toLocaleDateString(),
+    postedAt: formatRelativeTime(bc.createdAt),
+    likesCount: bc.likesCount,
+    repliesCount: bc.repliesCount,
   };
 }
+
 
 export function useFeedPosts() {
   const dispatch = useDispatch<AppDispatch>();
@@ -66,10 +64,10 @@ export function useFeedPosts() {
   // Fetch feed via RTK Query (limit to 5 by default)
   const { data: feedResponse, isLoading } = useGetFeedQuery({ limit: 5 });
 
-  const [createPost] = useCreatePostMutation();
+  const [addPostMutation] = useAddPostMutation();
   const [likePost] = useLikePostMutation();
   const [unlikePost] = useUnlikePostMutation();
-  const [createComment] = useCreateCommentMutation();
+  const [addCommentMutation] = useAddCommentMutation();
 
   // Sync RTK Query state into local state
   useEffect(() => {
@@ -79,26 +77,29 @@ export function useFeedPosts() {
       setPosts(mapped);
 
       const likedIds = backendPosts
-        .filter((p: any) => p.isLikedByMe)
+        .filter((p: any) => p.isLIkedByUser)
         .map((p: any) => p.id);
       setLikedPostIds(likedIds);
 
-      // Extract pagination details from meta
+      // Extract cursor and hasMore
       setNextCursor(feedResponse.meta?.pagination?.nextCursor || null);
       setHasMore(feedResponse.meta?.pagination?.hasMore || false);
     }
   }, [feedResponse]);
 
   const loadNextPage = useCallback(async () => {
-    if (!hasMore || isFetchingNext || !nextCursor) return;
-    setIsFetchingNext(true);
+    if (!hasMore || !nextCursor || isFetchingNext) return;
 
     try {
+      setIsFetchingNext(true);
       const result = await dispatch(
-        postsApi.endpoints.getFeed.initiate({ cursor: nextCursor, limit: 5 }, { forceRefetch: true })
+        postsApi.endpoints.getFeed.initiate(
+          { limit: 5, cursor: nextCursor },
+          { forceRefetch: true }
+        )
       ).unwrap();
 
-      if (result.status === "success") {
+      if (result && result.status === "success") {
         const newBackendPosts = result.data || [];
         const newMapped = newBackendPosts.map(mapBackendPostToPost);
 
@@ -107,7 +108,7 @@ export function useFeedPosts() {
 
         // Append liked IDs
         const newLikedIds = newBackendPosts
-          .filter((p: any) => p.isLikedByMe)
+          .filter((p: any) => p.isLIkedByUser)
           .map((p: any) => p.id);
         setLikedPostIds((prev) => [...prev, ...newLikedIds]);
 
@@ -122,13 +123,13 @@ export function useFeedPosts() {
     }
   }, [dispatch, nextCursor, hasMore, isFetchingNext]);
 
-  const addPost = useCallback(async (content: string, imageUrl?: string) => {
+  const addPost = useCallback(async (content: string, isPublic: boolean, imageUrl?: string) => {
     try {
-      await createPost({ text: content, visibility: "PUBLIC", imageUrl }).unwrap();
+      await addPostMutation({ text: content, isPublic, imageUrl }).unwrap();
     } catch (err) {
       handleError(err);
     }
-  }, [createPost]);
+  }, [addPostMutation]);
 
   const toggleLike = useCallback(async (postId: string) => {
     const isLiked = likedPostIds.includes(postId);
@@ -181,7 +182,7 @@ export function useFeedPosts() {
 
   const addComment = useCallback(async (postId: string, text: string) => {
     try {
-      const response = await createComment({ postId, text }).unwrap();
+      const response = await addCommentMutation({ postId, text }).unwrap();
       if (response.status === "success") {
         const newComment = mapBackendCommentToComment(response.data);
 
@@ -200,39 +201,17 @@ export function useFeedPosts() {
     } catch (err) {
       handleError(err);
     }
-  }, [createComment]);
-
-  const loadComments = useCallback(async (postId: string) => {
-    // try {
-    //   const result = await dispatch(
-    //     postsApi.endpoints.getComments.initiate(postId, { forceRefetch: true })
-    //   ).unwrap();
-
-    //   if (result.status === "success") {
-    //     const backendComments = result.data || [];
-    //     const mapped = backendComments.map(mapBackendCommentToComment);
-
-    //     setPosts((prevPosts) =>
-    //       prevPosts.map((post) =>
-    //         post.id === postId ? { ...post, comments: mapped } : post
-    //       )
-    //     );
-    //   }
-    // } catch (err) {
-    //   console.error(`Failed to load comments for post ${postId}:`, err);
-    // }
-  }, [dispatch]);
+  }, [addCommentMutation]);
 
   return {
     posts,
     likedPostIds,
     isLoading,
-    isFetchingNext,
     hasMore,
+    isFetchingNext,
+    loadNextPage,
     addPost,
     toggleLike,
     addComment,
-    loadComments,
-    loadNextPage,
   };
 }
