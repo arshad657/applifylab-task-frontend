@@ -7,11 +7,13 @@ export function PostReactionSummary({
   reactionAvatars,
   commentCount,
   shareCount,
+  onCommentClick,
 }: {
   reactionCount: number;
   reactionAvatars: string[];
   commentCount: number;
   shareCount: number;
+  onCommentClick?: () => void;
 }) {
   if (reactionCount === 0 && commentCount === 0 && shareCount === 0) return null;
 
@@ -35,7 +37,15 @@ export function PostReactionSummary({
         <span />
       )}
       <div className="flex gap-4">
-        {commentCount > 0 && <span>{commentCount} comments</span>}
+        {commentCount > 0 && (
+          <button
+            type="button"
+            onClick={onCommentClick}
+            className="hover:underline text-muted-foreground focus:outline-none cursor-pointer"
+          >
+            {commentCount} comments
+          </button>
+        )}
         {shareCount > 0 && <span>{shareCount} shares</span>}
       </div>
     </div>
@@ -58,7 +68,7 @@ export function PostActionRow({
         onClick={onToggleLike}
         aria-pressed={liked}
         className={cn(
-          "flex items-center justify-center gap-2 rounded-lg py-2 transition-colors hover:bg-secondary",
+          "flex items-center justify-center gap-2 rounded-lg py-2 transition-colors hover:bg-color10 cursor-pointer",
           liked ? "text-primary" : "text-muted-foreground"
         )}
       >
@@ -68,14 +78,14 @@ export function PostActionRow({
       <button
         type="button"
         onClick={onFocusComment}
-        className="flex items-center justify-center gap-2 rounded-lg py-2 text-muted-foreground transition-colors hover:bg-secondary"
+        className="flex items-center justify-center gap-2 rounded-lg py-2 text-muted-foreground transition-colors hover:bg-color10 cursor-pointer"
       >
         <MessageSquare className="h-4 w-4" />
         Comment
       </button>
       <button
         type="button"
-        className="flex items-center justify-center gap-2 rounded-lg py-2 text-muted-foreground transition-colors hover:bg-secondary"
+        className="flex items-center justify-center gap-2 rounded-lg py-2 text-muted-foreground transition-colors hover:bg-color10 cursor-pointer"
       >
         <Share2 className="h-4 w-4" />
         Share

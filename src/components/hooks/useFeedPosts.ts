@@ -35,7 +35,7 @@ function mapBackendPostToPost(bp: any): Post {
     reactionAvatars: [],
     commentCount: bp.commentsCount || 0,
     shareCount: 0,
-    comments: [],
+    comments: bp.comments ? bp.comments.map(mapBackendCommentToComment) : [],
   };
 }
 

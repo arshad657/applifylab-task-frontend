@@ -50,6 +50,8 @@
   --color-color7: var(--color7);
   --color-color8: var(--color8);
   --color-color9: var(--color9);
+  --color-color10: var(--color10);
+  --color-color11: var(--color11);
   --color-bg1: var(--bg1);
   --color-bg2: var(--bg2);
   --color-bg3: var(--bg3);
@@ -90,6 +92,8 @@
   --color7: #666666;
   --color8: #0acf83;
   --color9: #e8f4ff;
+  --color10: #E4F1FD;
+  --color11: #FBFCFD;
 
   --bg1: #f0f2f5;
   --bg2: #ffffff;

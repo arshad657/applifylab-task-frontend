@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { FeedPanel } from "./FeedPanel";
@@ -9,6 +9,7 @@ import { PostActionRow, PostReactionSummary } from "./PostReactions";
 import { CommentComposer, CommentList } from "./PostComments";
 import { useAuth } from "../shared/AuthContext";
 import type { Post } from "../types/feed";
+import { CommentsModal } from "./CommentsModal";
 
 export function PostCard({
   post,
@@ -25,6 +26,7 @@ export function PostCard({
 }) {
   const commentInputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
+  const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
 
   useEffect(() => {
     onLoadComments(post.id);
@@ -75,12 +77,13 @@ export function PostCard({
           reactionAvatars={post.reactionAvatars}
           commentCount={post.commentCount}
           shareCount={post.shareCount}
+          onCommentClick={() => setIsCommentsModalOpen(true)}
         />
 
         <PostActionRow
           liked={liked}
           onToggleLike={() => onToggleLike(post.id)}
-          onFocusComment={() => commentInputRef.current?.focus()}
+          onFocusComment={() => setIsCommentsModalOpen(true)}
         />
 
         <div className="space-y-4 border-t border-border pt-4">
@@ -91,6 +94,14 @@ export function PostCard({
           <CommentList comments={post.comments} hiddenCount={post.hiddenCommentCount} />
         </div>
       </div>
+
+      <CommentsModal
+        postId={post.id}
+        postAuthorId={post.author.id}
+        postAuthorName={post.author.name}
+        open={isCommentsModalOpen}
+        onOpenChange={setIsCommentsModalOpen}
+      />
     </FeedPanel>
   );
 }

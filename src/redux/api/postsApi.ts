@@ -34,16 +34,41 @@ export const postsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Post"],
     }),
-    createComment: builder.mutation<any, { postId: string; text: string }>({
-      query: ({ postId, text }) => ({
-        url: `/posts/${postId}/comments`,
+    createComment: builder.mutation<any, { postId: string; text: string; parentId?: string }>({
+      query: ({ postId, text, parentId }) => ({
+        url: "/post/create-comment",
         method: "POST",
-        body: { text },
+        body: { postId, text, parentId },
       }),
       invalidatesTags: (result, error, { postId }) => [
         { type: "Comment", id: postId },
         "Post",
       ],
+    }),
+    getComments: builder.query<any, string>({
+      query: (postId) => `/post/${postId}/comments`,
+      providesTags: (result, error, postId) => [{ type: "Comment", id: postId }],
+    }),
+    likeComment: builder.mutation<any, { commentId: string; postId: string }>({
+      query: ({ commentId }) => ({
+        url: `/likes/COMMENT/${commentId}`,
+        method: "POST",
+      }),
+      invalidatesTags: (result, error, { postId }) => [
+        { type: "Comment", id: postId },
+      ],
+    }),
+    unlikeComment: builder.mutation<any, { commentId: string; postId: string }>({
+      query: ({ commentId }) => ({
+        url: `/likes/COMMENT/${commentId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, { postId }) => [
+        { type: "Comment", id: postId },
+      ],
+    }),
+    getLikers: builder.query<any, { targetType: "POST" | "COMMENT"; targetId: string }>({
+      query: ({ targetType, targetId }) => `/likes/${targetType}/${targetId}/users`,
     }),
   }),
 });
@@ -54,4 +79,8 @@ export const {
   useLikePostMutation,
   useUnlikePostMutation,
   useCreateCommentMutation,
+  useGetCommentsQuery,
+  useLikeCommentMutation,
+  useUnlikeCommentMutation,
+  useGetLikersQuery,
 } = postsApi;
