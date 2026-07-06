@@ -13,7 +13,7 @@ export const CommentComposer = forwardRef<
   const [value, setValue] = useState("");
   const { user } = useAuth();
 
-  const avatarUrl = user?.avatarUrl || "https://i.pravatar.cc/150?img=12";
+  const avatarUrl = user?.avatarUrl || "https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t";
   const name = user ? `${user.firstName} ${user.lastName}` : "User";
 
   function handleSubmit(e: React.FormEvent) {

@@ -82,7 +82,7 @@ export function LikersModal({ targetId, targetType, open, onOpenChange }: Likers
               {likers.map((liker: any) => (
                 <div key={liker.id} className="flex items-center gap-3">
                   <Avatar className="h-9 w-9">
-                    <AvatarImage src={liker.avatarUrl || `https://i.pravatar.cc/150?img=12`} alt="" />
+                    <AvatarImage src={liker.avatarUrl || `https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t`} alt="" />
                     <AvatarFallback>{liker.firstName?.charAt(0) || "U"}</AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
@@ -299,7 +299,7 @@ export function CommentsModal({ postId, postAuthorId, postAuthorName, open, onOp
     user: {
       id: bc.authorId,
       name: bc.authorUsername,
-      avatarUrl: bc.authorAvatarUrl || `https://i.pravatar.cc/150?img=12`,
+      avatarUrl: bc.authorAvatarUrl || `https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t`,
       title: "Member",
     },
     content: bc.text,
@@ -383,7 +383,7 @@ export function CommentsModal({ postId, postAuthorId, postAuthorName, open, onOp
           <div className="border-t border-background bg-card px-6 py-4">
             <form onSubmit={handleSubmit} className="flex items-center gap-3">
               <Avatar className="h-9 w-9">
-                <AvatarImage src={user?.avatarUrl || "https://i.pravatar.cc/150?img=12"} alt="" />
+                <AvatarImage src={user?.avatarUrl || "https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t"} alt="" />
                 <AvatarFallback>{(user?.firstName || "U").charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="flex flex-1 items-center gap-1 rounded-full bg-bg3 px-4 py-2">

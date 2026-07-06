@@ -47,9 +47,14 @@ const authSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
+    updateAvatarUrl: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.avatarUrl = action.payload;
+      }
+    },
   },
 });
 
-export const { setCredentials, clearCredentials, setLoading } = authSlice.actions;
+export const { setCredentials, clearCredentials, setLoading, updateAvatarUrl } = authSlice.actions;
 export default authSlice.reducer;
 export type { AuthState as ReduxAuthState };

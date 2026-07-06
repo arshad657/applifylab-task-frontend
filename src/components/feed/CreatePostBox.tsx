@@ -31,7 +31,7 @@ export function CreatePostBox({
 
   const displayName = user ? `${user.firstName} ${user.lastName}` : "User";
   const firstName = user?.firstName || "User";
-  const avatarUrl = user?.avatarUrl || "https://i.pravatar.cc/150?img=12";
+  const avatarUrl = user?.avatarUrl || "https://i.pinimg.com/236x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t";
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

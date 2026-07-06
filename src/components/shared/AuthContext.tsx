@@ -13,6 +13,7 @@ import {
 } from "@/src/redux/api/authApi";
 import { baseApi } from "@/src/redux/api/baseApi";
 import { handleError } from "@/src/lib/handleError";
+import { UploadProfilePictureModal } from "./UploadProfilePictureModal";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -195,6 +196,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
+      <UploadProfilePictureModal />
     </AuthContext.Provider>
   );
 }
